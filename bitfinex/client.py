@@ -39,7 +39,7 @@ class TradeClient:
         Returns a nonce
         Used in authentication
         """
-        return str(time.time() * 1000000)
+        return str(int(time.time() * 1000000))
 
     def _sign_payload(self, payload):
         j = json.dumps(payload)
@@ -53,7 +53,7 @@ class TradeClient:
             "X-BFX-PAYLOAD": data
         }
 
-    def place_order(self, amount, price, side, ord_type, symbol='btcusd', exchange='bitfinex'):
+    def place_order(self, amount, price, side, ord_type, ocoorder=False, buy_price_oco='0.1', sell_price_oco='10000', symbol='btcusd', exchange='bitfinex'):
         """
         Submit a new order.
         :param amount:
@@ -73,8 +73,10 @@ class TradeClient:
             "price": price,
             "exchange": exchange,
             "side": side,
-            "type": ord_type
-
+            "type": ord_type,
+            "ocoorder": ocoorder,
+            "buy_price_oco": buy_price_oco,
+            "sell_price_oco": sell_price_oco,
         }
 
         signed_payload = self._sign_payload(payload)
@@ -104,10 +106,10 @@ class TradeClient:
         r = requests.post(self.URL + "/order/cancel", headers=signed_payload, verify=True)
         json_resp = r.json()
 
-        try:
-            json_resp['avg_excution_price']
-        except:
-            return json_resp['message']
+        # try:
+        #     json_resp['avg_excution_price']
+        # except:
+        #     return json_resp['message']
 
         return json_resp
 
@@ -143,10 +145,10 @@ class TradeClient:
         r = requests.post(self.URL + "/order/status", headers=signed_payload, verify=True)
         json_resp = r.json()
 
-        try:
-            json_resp['avg_excution_price']
-        except:
-            return json_resp['message']
+        # try:
+        #     json_resp['avg_excution_price']
+        # except:
+        #     return json_resp['message']
 
         return json_resp
 
@@ -303,9 +305,11 @@ class TradeClient:
 
         :return:
         """
+        _this_nonce = self._nonce;
+        print(_this_nonce);
         payload = {
             "request": "/v1/balances",
-            "nonce": self._nonce
+            "nonce": "42.3"
         }
 
         signed_payload = self._sign_payload(payload)
