@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from setuptools import setup
 
 # Runtime dependencies. See requirements.txt for development dependencies.

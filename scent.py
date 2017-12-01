@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from sniffer.api import * # import the really small API
 import os, termstyle
 
